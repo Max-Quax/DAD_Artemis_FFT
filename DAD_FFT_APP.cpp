@@ -28,15 +28,11 @@ arm_status DAD_FFT_App::FFT_Calculate(q15_t inData[SAMPLE_LENGTH], q15_t outData
 }
 
 // Use this one Zach
-void DAD_FFT_App::FFT_Calculate(byte inData[SAMPLE_LENGTH * 2], byte outData[SAMPLE_LENGTH]) {
+void DAD_FFT_App::FFT_Calculate(uint16_t inData[SAMPLE_LENGTH], byte outData[SAMPLE_LENGTH]) {
   // Convert input
-  for (int i = 0; i < SAMPLE_LENGTH; i++) {
-    inData_q15[i] = (((q15_t)inData[i * 2] << 8) | (q15_t)inData[i * 2 + 1]);  // Expects MSB first
-  }
-  this->FFT_Calculate(inData_q15, outData_q15);
+  this->FFT_Calculate(inData, outData_q15);
 
   for (int i = 0; i < SAMPLE_LENGTH; i++) {
-    //outData[i] = (byte)((outData_q15[i] >> 8) & 0x0FF);
     outData[i] = (byte)outData_q15[i];
   }
 }
