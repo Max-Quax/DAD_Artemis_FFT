@@ -5,36 +5,26 @@ DAD_FFT_App::DAD_FFT_App() {
 }
 
 // Calculates FFT
-arm_status DAD_FFT_App::FFT_Calculate(q15_t inData[SAMPLE_LENGTH], q15_t outData[SAMPLE_LENGTH]) {
+arm_status DAD_FFT_App::FFT_Calculate(float inData[SAMPLE_LENGTH], uint8_t outData[SAMPLE_LENGTH]) {
   int i = 0;
+  float data_buff[SAMPLE_LENGTH * 2];
 
-  // Compute RFFT
+  // Set up window
   for (i = 0; i < SAMPLE_LENGTH; i++) {
-    inData[i] = (q15_t)(hann[i] * inData[i]);
+    inData[i] = (float)(hann[i] * inData[i]);
   }
-  arm_rfft_instance_q15 instance;
-  status = arm_rfft_init_q15(&instance, SAMPLE_LENGTH, IFFT_FLAG, DO_BIT_REVERSE);
-
-  arm_rfft_q15(&instance, inData, data_input);
-
-
+  // Init RFFT
+  arm_rfft_instance_f32 instance;
+  arm_cfft_radix4_instance_f32 radixInst;
+  status = arm_rfft_init_f32(&instance, &radixInst, SAMPLE_LENGTH, IFFT_FLAG, DO_BIT_REVERSE);
+  // Compute FFT
+  arm_rfft_f32(&instance, inData, data_buff);
   // Calculate magnitude
   for (i = 0; i < 2 * SAMPLE_LENGTH; i += 2) {
     outData[i / 2] =
-      (int32_t)(sqrtf((data_input[i] * data_input[i]) + (data_input[i + 1] * data_input[i + 1])));  // Max is 256
+      (uint8_t)(sqrtf((data_buff[i] * data_buff[i]) + (data_buff[i + 1] * data_buff[i + 1])));  // Max is 256
   }
-
   return status;
-}
-
-// Use this one Zach
-void DAD_FFT_App::FFT_Calculate(uint16_t inData[SAMPLE_LENGTH], byte outData[SAMPLE_LENGTH]) {
-  // Convert input
-  this->FFT_Calculate(inData, outData_q15);
-
-  for (int i = 0; i < SAMPLE_LENGTH; i++) {
-    outData[i] = (byte)outData_q15[i];
-  }
 }
 
 
