@@ -3,6 +3,9 @@
 float32_t inData[SAMPLE_LENGTH];
 float32_t outData[SAMPLE_LENGTH/2];
 
+//#define TESTMODE_FLOAT
+#define TESTMODE_8_BIT 
+
 void setup() {
   Serial.begin(115200);
 
@@ -40,11 +43,36 @@ void setup() {
   
   
   
+  #ifdef TESTMODE_8_BIT 
+  while(1){
+    uint8_t outData_8bit[SAMPLE_LENGTH];
+    // Collect data, calc sum
+      fftApp.collectData(inData);
+
+      // Output collected input
+      Serial.println("Data in: ");
+      for(int i = 0; i < SAMPLE_LENGTH; i++){
+        Serial.print(" ");
+        Serial.print(inData[i]);
+      }
+      Serial.println();
+
+      // Calc FFT
+      fftApp.FFT_Calculate(inData, outData_8bit);
+      
+      // Output FFT
+      Serial.println("Data out: ");
+      for(int i = 0; i < SAMPLE_LENGTH; i++){
+        Serial.print(" ");
+        Serial.print(outData_8bit[i]);
+      }
+      Serial.println("\n\n");  
+  }
+  #endif
   
   
   
-  
-  
+  #ifdef TESTMODE_FLOAT   
   while(1){
     // Collect data, calc sum
     fftApp.collectData(inData);
@@ -68,7 +96,7 @@ void setup() {
     }
     Serial.println("\n\n");  
   }
-
+  #endif
 }
 
 void loop() {

@@ -8,11 +8,11 @@ DAD_FFT_App::DAD_FFT_App() {
 void DAD_FFT_App::FFT_Calculate(float inData[SAMPLE_LENGTH], uint8_t outData[SAMPLE_LENGTH]) {
   float tempOut[SAMPLE_LENGTH/2];
   this->FFT_Calculate(inData, tempOut);
-  
+
   // tempOut is of size SAMPLE_LENGTH/2. In order to keep the rest of the code the same, output is SAMPLE_LENGTH
   for(int i = 0; i < SAMPLE_LENGTH/2; i++){
-    if(tempOut[i] == 255)
-      tempOut[i] = 254;
+    //tempOut[i] = sqrtf(tempOut[i] / 256);
+    tempOut[i] = tempOut[i] * SCALING_FACTOR;
     outData[i*2]    = (uint8_t) tempOut[i];
     outData[i*2+1]  = (uint8_t) tempOut[i];
   }
