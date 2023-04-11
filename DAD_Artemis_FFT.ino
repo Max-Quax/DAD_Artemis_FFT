@@ -1,10 +1,11 @@
 #include "DAD_FFT_App.h"
 
-float inData[SAMPLE_LENGTH];
-uint8_t outData[SAMPLE_LENGTH];
+float32_t inData[SAMPLE_LENGTH];
+float32_t outData[SAMPLE_LENGTH/2];
 
 void setup() {
   Serial.begin(115200);
+
   DAD_FFT_App fftApp;
 
   // Populate inData
@@ -16,18 +17,58 @@ void setup() {
       inData[i] = 0;
   }
 
+
   double timeStart = micros();
+    Serial.print("test");
   fftApp.FFT_Calculate(inData, outData);
+    Serial.print("\ntest2");
   double timeElapsed = micros() - timeStart;
+
 
   Serial.print("Time Elapsed: ");
   Serial.println(timeElapsed);  
   Serial.println("Data out: ");
-  for(int i = 0; i < SAMPLE_LENGTH; i++){
+  for(int i = 0; i < SAMPLE_LENGTH/2-1; i++){
     Serial.print(" ");
     Serial.print((byte) outData[i]);
   }
   Serial.println("\n\n");  
+
+
+  analogReadResolution(16);    // set the resolution of analogRead results
+
+  
+  
+  
+  
+  
+  
+  
+  
+  while(1){
+    // Collect data, calc sum
+    fftApp.collectData(inData);
+
+    // Output collected input
+    Serial.println("Data in: ");
+    for(int i = 0; i < SAMPLE_LENGTH; i++){
+      Serial.print(" ");
+      Serial.print(inData[i]);
+    }
+    Serial.println();
+
+    // Calc FFT
+    fftApp.FFT_Calculate(inData, outData);
+    
+    // Output FFT
+    Serial.println("Data out: ");
+    for(int i = 0; i < SAMPLE_LENGTH/2-1; i++){
+      Serial.print(" ");
+      Serial.print(outData[i]);
+    }
+    Serial.println("\n\n");  
+  }
+
 }
 
 void loop() {
