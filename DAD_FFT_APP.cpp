@@ -11,7 +11,6 @@ void DAD_FFT_App::FFT_Calculate(float inData[SAMPLE_LENGTH], uint8_t outData[SAM
 
   // tempOut is of size SAMPLE_LENGTH/2. In order to keep the rest of the code the same, output is SAMPLE_LENGTH
   for(int i = 0; i < SAMPLE_LENGTH/2; i++){
-    //tempOut[i] = sqrtf(tempOut[i] / 256);
     tempOut[i] = tempOut[i] * SCALING_FACTOR;
     outData[i*2]    = (uint8_t) tempOut[i];
     outData[i*2+1]  = (uint8_t) tempOut[i];

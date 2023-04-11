@@ -20,13 +20,11 @@ void setup() {
       inData[i] = 0;
   }
 
-
   double timeStart = micros();
     Serial.print("test");
   fftApp.FFT_Calculate(inData, outData);
     Serial.print("\ntest2");
   double timeElapsed = micros() - timeStart;
-
 
   Serial.print("Time Elapsed: ");
   Serial.println(timeElapsed);  

@@ -9,7 +9,7 @@ extern "C"{
 #define SAMPLE_LENGTH         512
 #define MAX_16_BIT            65536 - 1
 #define IFFT_FLAG             0
-#define SCALING_FACTOR        1/ 32768
+#define SCALING_FACTOR        1/32768
 
 class DAD_FFT_App{
   public:
